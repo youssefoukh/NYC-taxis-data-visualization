@@ -19,4 +19,4 @@ Info should pop about the link of the server its usually 127.0.0.1:5000
 ## Authors
 * **Youssef Oukhouya** - *Initial work* - [youssefoukhouya](https://github.com/youssefoukhouya)
 * **Salman Hamdouchi** - *Initial work* - [SalmanHamdouchi](https://github.com/SalmanHamdouchi)
-See also the list of [collaborators](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/youssefoukhouya/PFE-Data-Visualisation/contributors) who participated in this project.

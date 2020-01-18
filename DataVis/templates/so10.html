@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block DatavisSO10 %}
+    <h1>Data Vis</h1>
+    <ul>
+        {% for item,value in list_post %}
+            <li>{{ item.year }}</li>
+            <li>{{ value }}</li>
+        {% endfor %}
+    </ul>
+{% endblock DatavisSO10 %}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <connectionStrings>
+    <add name='SO10'>Driver={SQL Server};Server=DESKTOP-UA5ADAO;Database=StackOverflow2010;Trusted_Connection=yes;</add>
+  </connectionStrings>
+</configuration>

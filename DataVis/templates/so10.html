@@ -2,8 +2,8 @@
 {% block DatavisSO10 %}
     <h1>Data Vis</h1>
     <ul>
-        {% for item,value in list_post %}
-            <li>{{ item.year }}</li>
+        {% for item,value in list_rep.items() %}
+            <li>{{ item }}</li>
             <li>{{ value }}</li>
         {% endfor %}
     </ul>

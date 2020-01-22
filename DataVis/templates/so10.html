@@ -1,10 +1,6 @@
 {% extends "layout.html" %}
 {% block DatavisSO10 %}
     <h1>Data Vis</h1>
-    <ul>
-        {% for item,value in list_rep.items() %}
-            <li>{{ item }}</li>
-            <li>{{ value }}</li>
-        {% endfor %}
-    </ul>
+    <p id="test"></p>
+    <script src="{{url_for('static', filename='main.js')}}"></script>
 {% endblock DatavisSO10 %}

@@ -16,5 +16,5 @@ class User:
                 elif vote.Id == 3:
                     if rep_gained - 2 >= 1:
                         rep_gained = rep_gained - 2
-            list_reputation[post.CreationDate.strftime("%H:%M:%S")] = rep_gained
+            list_reputation[post.CreationDate.strftime("%d %b, %Y")] = rep_gained
         return list_reputation

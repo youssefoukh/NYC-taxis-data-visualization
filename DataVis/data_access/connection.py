@@ -1,5 +1,5 @@
 import pyodbc
-from DataVis.acces_donnees import helper
+from DataVis.data_access import helper
 
 
 class Connection:
@@ -8,7 +8,7 @@ class Connection:
 
     def connect_(self):
         """using the package pyodbc we connect to the database via the connection string"""
-        # this extra if makes sure this is the first connection made (singleton pattern)
+        # this extra if makes sure that only one instance gets created by this class
         if self.conn is None:
             try:
                 self.conn = pyodbc.connect(helper.cnstr(str('SO10')))

@@ -4,7 +4,7 @@ this file is for attributing urls to actions
 
 from DataVis import app
 from flask import render_template, jsonify
-from DataVis.metier.user import User
+from DataVis.business.business_factory import BusinessFactory
 
 
 @app.route('/')
@@ -15,4 +15,4 @@ def index():
 
 @app.route("/SO10/data")
 def reputation_year():
-    return jsonify(User().get_reputation_year(2))
+    return jsonify(BusinessFactory.get_business_user().get_reputation_year(17))

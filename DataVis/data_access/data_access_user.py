@@ -1,10 +1,10 @@
 import pyodbc
 
-from DataVis.acces_donnees.acces_donnees_ import AccesDonnees
+from DataVis.data_access.data_access_ import DataAccess
 
 
-class AccesDonneesUser(AccesDonnees):
-    """this class serves to getting data and processing data from the table Users that belong to the stackoverflow db"""
+class DataAccessUser(DataAccess):
+    """this class serves to getting and processing data from the table Users that belong to the stackoverflow db"""
 
     def get_all(self):
         """gets the top 500 users from the stackoverflow database"""
@@ -34,7 +34,7 @@ class AccesDonneesUser(AccesDonnees):
         return cursor.fetchall()
 
     def get_votes(self, post_id):
-        """this function receives a post id and return all the votes of that post """
+        """this function receives a post id as parameter and return all the votes of that post"""
         cursor = self.conn.cursor()
         try:
             cursor.execute('SELECT vt.Id FROM Votes v,VoteTypes vt where v.VoteTypeId=vt.Id and v.PostId=?;', post_id)

@@ -28,7 +28,7 @@ class DataAccessUser(DataAccess):
         """this function return the total posts of a given user """
         cursor = self.conn.cursor()
         try:
-            cursor.execute('SELECT p.Id,p.CreationDate FROM Posts p where p.OwnerUserId=?;', id)
+            cursor.execute('SELECT p.Id,p.CreationDate FROM Posts p where p.OwnerUserId=? ORDER BY p.CreationDate;', id)
         except pyodbc.Error as err:
             print('Error !!!!! %s' % err)
         return cursor.fetchall()

@@ -5,11 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DatavisSO10</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    <script src="{{url_for('static', filename='js/d3/d3.js')}}"></script>
+    <link href="" rel="stylesheet">
+
 </head>
 <body>
     {% block DatavisSO10 %}
     {% endblock DatavisSO10 %}
+    <script src="{{url_for('static', filename='js/fetch.js')}}"></script>
     <script src="{{url_for('static', filename='js/main.js')}}"></script>
-    <script src="{{url_for('static', filename='js/d3.js')}}"></script>
 </body>
 </html>

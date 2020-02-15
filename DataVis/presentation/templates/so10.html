@@ -1,5 +1,14 @@
 {% extends "layout.html" %}
 {% block DatavisSO10 %}
-    <h1>Data Vis</h1>
-    <div id="chart"></div>
+    <p class="vizType">Data Visualisation</p>
+    <div class="wrapper">
+        <select name="types"  onchange="changeVisualization()" id="choice">
+            <option value="" disabled=true autofocus=true>--Type of visualisation--</option>
+            <option value="lineChart">Line Chart</option>
+            <option value="barChart">Bar Chart</option>
+          </select>
+        <p class="chartTitle">A StackOverflow's User Reputation</p>
+        <svg id="chart" ></svg>
+        
+    </div>
 {% endblock DatavisSO10 %}

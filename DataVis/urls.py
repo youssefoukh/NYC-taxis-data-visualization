@@ -15,4 +15,4 @@ def index():
 
 @app.route("/SO10/data")
 def reputation_year():
-    return jsonify(BusinessFactory.get_business_user().get_reputation_year(17))
+    return jsonify(BusinessFactory.get_business_user().get_reputation_year(36))

@@ -1,0 +1,183 @@
+@font-face {
+  font-family: bahnschrift;
+  src: url('../fonts/bahnschrift.ttf');
+}
+@font-face {
+  font-family: raleway;
+  src: url('../fonts/raleway.ttf');
+}
+@font-face {
+  font-family: poppins;
+  src: url('../fonts/poppins.ttf');
+}
+body {
+  margin: 0px;
+  padding: 0;
+  background-color: #1A181A;
+}
+
+svg {
+  display: block;
+  margin: 0 auto;
+  width:100%;
+  height:65vh;
+}
+
+.vizType {
+  font-family: raleway;
+  font-size: 50px;
+  text-align: center;
+  padding: 40px 0 20px 0;
+  margin: 0;
+  color: rgb(255, 255, 255);
+}
+
+.wrapper {
+  
+  height: 82vh;
+  width: 75%;
+  margin: 0 auto;
+  background-color: #28292D;
+  border-radius: 10px;
+  /* box-shadow: 0px 2px 6px 0px #828282; */
+}
+
+.chartTitle {
+  font-family: bahnschrift;
+  font-size: 50px;
+  text-align: center;
+  padding: 20px 0 0 0;
+  margin: 0;
+  color: #ffffff;
+}
+
+.overlay{
+  fill : #d3b7b700;
+}
+
+.upperToolTip{
+  transition: 0.4s all;
+}
+.upperToolTip path{
+  fill: rgba(8, 8, 8, 0.75);
+  stroke: rgb(44, 84, 125);
+  stroke-width: 2px;
+  transform: scale(1.2) rotate(180deg) translate(0, 0.3%);
+}
+
+.upperToolTipText{
+  font-family : poppins;
+  font-size : 35px;
+  fill : #ffffff;;
+  transform : translate(0%,-3.2%);
+  text-anchor: middle;
+}
+
+.bottomToolTip{
+  transition: 0.4s all;
+}
+
+.bottomToolTip rect{
+  transform :translate(-6.75%,0);
+}
+
+.bottomToolTipText{
+  font-family : 'poppins';
+  font-size : 20px;
+  fill : white;
+  transform : translate(0%,5.5%);
+  text-anchor: middle;
+
+}
+.line-path {
+  fill: none;
+  stroke-linejoin: round;
+  stroke: rgb(44, 84, 125);
+  stroke-width: 4px;
+}
+.area-path {
+  fill: rgba(44, 84, 125, 0.199);
+  stroke-linejoin: round;
+}
+text {
+  font-family: poppins;
+}
+
+.tick text {
+  font-size: 2.0em;
+  fill: #e0e0e0;
+}
+.domain{
+  stroke : #28292D
+}
+.tick line {
+  stroke: #474952a6;
+}
+
+@media screen and (max-width: 1921px){
+
+  .bottomToolTip rect {
+    transform :translate(-8.1%,0);
+  }
+  .bottomToolTipText {
+    transform : translate(0%,6%);
+  }
+
+}
+
+
+@media screen and (max-width: 1600px){
+
+  .bottomToolTip rect {
+    transform :translate(-5.95%,0);
+  }
+  .bottomToolTipText {
+    transform : translate(0%,5.5%);
+  }
+
+}
+
+
+@media screen and (max-width: 1367px){
+
+  .bottomToolTip rect {
+    transform :translate(-7.6%,0);
+  }
+  .bottomToolTipText {
+    transform :translate(0%,6.4%);
+  }
+
+}
+
+h1#title{
+  font-family: monospace;
+  color : white;
+  font-size : 1.6em;
+}
+.val {
+  fill : white;
+}
+line{
+  stroke : #FDFFFC;
+}
+.highlight {
+  fill : #E71D36;
+  stroke : #E71D36;
+}
+.dates{
+  font-size: 0.15em;
+}
+.bar{
+  stroke : rgb(44, 84, 125);
+  fill : rgb(44, 84, 125);
+}
+@media screen and (max-width: 1280px) {
+  text {
+    font-size : 0.7em;
+  }
+  svg{
+    height : 40svg;
+  }
+}
+
+

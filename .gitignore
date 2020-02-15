@@ -5,3 +5,5 @@ __pycache__
 .idea/**/dictionaries
 .idea/**/shel
 **.sql
+**.json
+.vscode

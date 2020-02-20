@@ -1,5 +1,5 @@
-from DataVis.business.user import User
-from DataVis.data_access.data_access_user import DataAccessUser
+from DataVis.business.stackoverflow.user import User
+from DataVis.data_access.stackoverflow.data_access_user import DataAccessUser
 
 
 class BusinessFactory:

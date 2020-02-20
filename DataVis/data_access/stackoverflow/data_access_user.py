@@ -1,6 +1,6 @@
 import pyodbc
 
-from DataVis.data_access.data_access_ import DataAccess
+from DataVis.data_access.stackoverflow.data_access_ import DataAccess
 
 
 class DataAccessUser(DataAccess):

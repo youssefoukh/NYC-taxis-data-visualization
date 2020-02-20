@@ -1,5 +1,5 @@
 import pyodbc
-from DataVis.data_access import helper
+from DataVis.data_access.stackoverflow import helper
 
 
 class Connection:

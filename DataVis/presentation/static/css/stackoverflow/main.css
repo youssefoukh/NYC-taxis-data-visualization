@@ -1,14 +1,14 @@
 @font-face {
   font-family: bahnschrift;
-  src: url('../fonts/bahnschrift.ttf');
+  src: url('../../fonts/bahnschrift.ttf');
 }
 @font-face {
   font-family: raleway;
-  src: url('../fonts/raleway.ttf');
+  src: url('../../fonts/raleway.ttf');
 }
 @font-face {
   font-family: poppins;
-  src: url('../fonts/poppins.ttf');
+  src: url('../../fonts/poppins.ttf');
 }
 body {
   margin: 0px;

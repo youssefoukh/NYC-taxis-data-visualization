@@ -1,4 +1,4 @@
-from DataVis.data_access.connection import Connection
+from DataVis.data_access.stackoverflow.connection import Connection
 
 
 class DataAccess:

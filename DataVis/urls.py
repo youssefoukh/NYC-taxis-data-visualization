@@ -8,9 +8,14 @@ from DataVis.business.business_factory import BusinessFactory
 
 
 @app.route('/')
-@app.route('/SO10')
+@app.route('/taxi')
 def index():
-    return render_template('so10.html')
+    return render_template('taxi/taxi.html')
+
+
+@app.route('/SO10')
+def stackoverflow():
+    return render_template('stackoverflow/so10.html')
 
 
 @app.route("/SO10/data")

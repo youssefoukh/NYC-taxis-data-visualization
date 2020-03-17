@@ -1,5 +1,5 @@
 import pyodbc
-from DataVis.data_access.stackoverflow import helper
+from DataVis.data_access.utils.helper import Helper
 
 
 class Connection:
@@ -11,7 +11,7 @@ class Connection:
         # this extra if makes sure that only one instance gets created by this class
         if self.conn is None:
             try:
-                self.conn = pyodbc.connect(helper.cnstr(str('SO10')))
+                self.conn = pyodbc.connect(Helper.cnstr(str('SO10')))
             except pyodbc.Error as e:
                 print(e)
         return self.conn

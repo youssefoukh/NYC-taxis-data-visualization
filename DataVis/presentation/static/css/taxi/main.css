@@ -1,0 +1,245 @@
+@font-face {
+    font-family: montserrat;
+    src: url('../../fonts/Montserrat-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: poppins;
+    src: url('../../fonts/poppins.ttf');
+}
+@font-face {
+    font-family: raleway;
+    src: url('../../fonts/raleway.ttf');
+}
+
+body { 
+    padding: 0;
+    margin:0;
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+ }
+
+.overlay{
+    width: 49%;
+    position: absolute;
+    top: 26%;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    color: #ddd;
+    box-shadow: 0 0 6px 0px rgba(102,175,234,.8);
+    padding: 30px 30px 30px 30px;
+    z-index: 100;
+    margin: auto;
+    opacity: 1;
+}
+
+.header{
+    font-family: montserrat;
+    font-size: 33px;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.vizDesc{
+    font-family: poppins;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+#beginButton{
+    color: #fff;
+    background-color: #234A8D;
+    padding: 8px 20px;
+    display: inline;
+    border: 0;
+    outline: 0;
+    border-radius: 3px;
+    font-family: poppins;
+    font-size: 18px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+#loadingText{
+    display: none;
+    margin-left: 8px;
+    font-family: poppins;
+    font-size: 18px;
+}
+.dateDiv{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+input[type = date]::-webkit-inner-spin-button{
+    display: none;
+    -webkit-appearance: none;
+}
+input[type = date]::-webkit-calendar-picker-indicator {
+
+    background-image: url(../../images/arrow.png);
+    background-position: center;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+}
+input[type = date]::-webkit-calendar-picker-indicator:hover{
+    background-color: black;
+}
+.dateDiv input{
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #000000;
+    color: #ffffff;
+    outline: 0;
+    border: 0;
+    padding: 3px 0px 3px 8px;
+    box-shadow: 0 0 6px 1px rgba(102,175,234,.8);
+}
+.dateDiv *{
+    display: inline;
+    margin: 0;
+    font-family: poppins;
+    font-size: 17px;
+
+}
+.hiddenOverlay{
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+#beginButton:disabled{
+    background-color: #83aaef;
+    cursor: initial;
+}
+
+.blackBG{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: .5;
+    z-index: 50;
+}
+.pointsInputs{
+    position: absolute;
+    top: 50%;
+    left: 1%;
+    width: 15%;
+    background: rgba(0,0,0,.6);
+    border-radius: 10px;
+    color: #fff;
+    padding: 25px;
+    z-index: 15; 
+    font-family: raleway;
+}
+.pointsInputs h3{
+    font-family: raleway;
+    font-size: 35px;
+    margin: 0;
+    padding-bottom: 15px;
+}
+.pointsInputs span{
+    font-size: 18px;
+    font-family: raleway;
+    position: relative;
+    bottom: .5%;
+}
+.pointsInputs div{
+    margin-bottom: 10px;;
+}
+.legend{
+    position: absolute;
+    top: 20%;
+    left: 1%;
+    width: 15%;
+    background: rgba(0,0,0,.6);
+    border-radius: 10px;
+    color: #fff;
+    padding: 25px;
+    z-index: 15; 
+    font-family: raleway;
+
+}
+.legend h2{
+    font-size: 35px;
+    color: white;
+    display: inline;
+    margin-left: 15px;
+}
+.legendHeader{
+    margin-bottom: 20px;
+}
+.fa-map-marker-alt{
+    font-size: 35px;
+}
+.fa-circle{
+    font-size: 20px;
+    margin-right: 10px;
+}
+.startPointLegend i{
+    color: #00E676;
+}
+.endPointLegend i{
+    color: #940128;
+}
+.legend i{
+    display: inline;
+}
+.legend p{
+    display: inline;
+    margin: 0;
+    font-size: 18px;
+}
+.startPointLegend{
+    margin-left: 5px;
+}
+.endPointLegend{
+    margin-left: 5px;
+    margin-top: 15px;
+}
+.tripLegend path{
+    stroke: rgb(255, 178, 72);
+    stroke-width: 4.4px;
+    stroke-opacity: 1 !important;
+}
+.tripLegend p{
+    margin-left: 40px;
+}
+.tripLegend{
+    margin-top: 15px;
+}
+#tripPath{
+    margin-top: 0px;
+    width: 32px;
+    height: 40px;
+    position: absolute;
+}
+#map { 
+    position:absolute; 
+    width: 100%;
+    height: 100%;
+}
+
+path{
+    fill: none;
+    stroke-linejoin: round;
+    stroke: rgb(243, 221, 94);
+    /* color: #5B00A2;
+    color: #C9447A; */
+    stroke-opacity: .5;
+    stroke-width: .8px;
+    z-index: 30;
+}
+svg { 
+    position:absolute; 
+    width: 100%;
+    height: 100%;
+}

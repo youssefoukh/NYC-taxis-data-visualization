@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DatavisTAXI</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/taxi/main.css')}}">
     <script src="{{url_for('static', filename='js/d3/d3.js')}}"></script>
+    <meta name="viewport" content="width=device-width initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/taxi/all.css')}}"  rel="stylesheet">
 </head>
 <body>
     {% block DatavisTAXI %}
     {% endblock DatavisTAXI %}
+    <script src="{{url_for('static', filename='js/taxi/main.js')}}"></script>
 </body>
 </html>

@@ -13,6 +13,16 @@ def index():
     return render_template('taxi/taxi.html')
 
 
+@app.route('/taxi/data')
+def taxi_trips():
+    return jsonify(BusinessFactory.get_business_taxi().transform_rows())
+
+
+@app.route("/taxi/data/<date>")
+def profile(date):
+    return jsonify(BusinessFactory.get_business_taxi().get_data_by_date(date))
+
+
 @app.route('/SO10')
 def stackoverflow():
     return render_template('stackoverflow/so10.html')

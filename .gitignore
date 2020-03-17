@@ -6,5 +6,5 @@ __pycache__
 .idea/**/shel
 **.sql
 **.json
-.vscode
+.vscode/
 **.csv

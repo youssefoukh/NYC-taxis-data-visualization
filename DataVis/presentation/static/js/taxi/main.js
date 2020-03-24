@@ -15,11 +15,12 @@ var map = new mapboxgl.Map({
 map.addControl(new mapboxgl.NavigationControl());
 
 /**
-* This function is used for getting the data and calling the draw method
-*/
+ * This function is used for getting the data and calling the draw method
+ */
 function setup() {
 	let date = document.getElementById("#date").value;
-	//using the ternary operator we check if the user wants to view a whole month or just a specific day
+
+	// Using the ternary operator we check if the user wants to view a whole month or just a specific day
 	d3.json(date == "" ? "static/js/taxi/geo_taxi.json" : ("taxi/data/" + date)).then((d = []) => {
 		d3.select(".overlay").classed("hiddenOverlay", true);
 		d3.select(".overlay").remove();
@@ -35,7 +36,7 @@ function projectPoint(lon, lat) {
 	var point = map.project(new mapboxgl.LngLat(lon, lat));
 	this.stream.point(point.x, point.y);
 }
-	
+
 /**
  * This function defines a transform using the projectPoint function
  */
@@ -77,47 +78,55 @@ function translatePoint(d) {
 function appendDefs() {
 	svg = document.querySelector(".tripsSVG");
 	svg.insertAdjacentHTML('beforeend',
-		'<defs>' 
+		'<defs>'
 
-			+ '<filter id="glow" width="200%" height="200%">'
-			
-				+'<feFlood result="flood" flood-color="#FB840E" flood-opacity="1"></feFlood>' 
-				+'<feComposite in="flood" result="mask" in2="SourceGraphic" operator="in"></feComposite>' 
-				+'<feMorphology in="mask" result="dilated" operator="dilate" radius="1"></feMorphology>' 
-				+'<feGaussianBlur in="dilated" result="blurred" stdDeviation="5"></feGaussianBlur>'
+		+
+		'<filter id="glow" width="200%" height="200%">'
 
-			
-				+'<feFlood result="flood2" flood-color="#C9447A" flood-opacity="1"></feFlood>' 
-				+'<feComposite in="flood2" result="mask2" in2="SourceGraphic" operator="in"></feComposite>' 
-				+'<feMorphology in="mask2" result="dilated2" operator="dilate" radius="3"></feMorphology>' 
-				+'<feGaussianBlur in="dilated2" result="blurred2" stdDeviation="12"></feGaussianBlur>'
+		+
+		'<feFlood result="flood" flood-color="#FB840E" flood-opacity="1"></feFlood>' +
+		'<feComposite in="flood" result="mask" in2="SourceGraphic" operator="in"></feComposite>' +
+		'<feMorphology in="mask" result="dilated" operator="dilate" radius="1"></feMorphology>' +
+		'<feGaussianBlur in="dilated" result="blurred" stdDeviation="5"></feGaussianBlur>'
 
-			
-				+'<feFlood result="flood3" flood-color="#91255A" flood-opacity="1"></feFlood>' 
-				+'<feComposite in="flood3" result="mask3" in2="SourceGraphic" operator="in"></feComposite>' 
-				+'<feMorphology in="mask3" result="dilate3" operator="dilate" radius="2"></feMorphology>' 
-				+'<feGaussianBlur in="dilate3" result="blurred3" stdDeviation="30"></feGaussianBlur>'
 
-				+'<feMerge>' 
-					+'<feMergeNode in="blurred3"></feMergeNode>' 
-					+'<feMergeNode in="blurred2"></feMergeNode>' 
-					+'<feMergeNode in="blurred"></feMergeNode>'
-					+'<feMergeNode in="SourceGraphic"></feMergeNode>'
-				+'</feMerge>'
+		+
+		'<feFlood result="flood2" flood-color="#C9447A" flood-opacity="1"></feFlood>' +
+		'<feComposite in="flood2" result="mask2" in2="SourceGraphic" operator="in"></feComposite>' +
+		'<feMorphology in="mask2" result="dilated2" operator="dilate" radius="3"></feMorphology>' +
+		'<feGaussianBlur in="dilated2" result="blurred2" stdDeviation="12"></feGaussianBlur>'
 
-			+'</filter>'
 
-		+'</defs>');
+		+
+		'<feFlood result="flood3" flood-color="#91255A" flood-opacity="1"></feFlood>' +
+		'<feComposite in="flood3" result="mask3" in2="SourceGraphic" operator="in"></feComposite>' +
+		'<feMorphology in="mask3" result="dilate3" operator="dilate" radius="2"></feMorphology>' +
+		'<feGaussianBlur in="dilate3" result="blurred3" stdDeviation="30"></feGaussianBlur>'
+
+		+
+		'<feMerge>' +
+		'<feMergeNode in="blurred3"></feMergeNode>' +
+		'<feMergeNode in="blurred2"></feMergeNode>' +
+		'<feMergeNode in="blurred"></feMergeNode>' +
+		'<feMergeNode in="SourceGraphic"></feMergeNode>' +
+		'</feMerge>'
+
+		+
+		'</filter>'
+
+		+
+		'</defs>');
 }
-
 
 /**
  * This function will actually append paths to our svg element so we can visualise the data on form of path and 
  * circles over the map
  */
 function drawData(data) {
+
 	//This timefactor might be used later to speed up the viz
 	let timeFactor = 5;
+
 	/**
 	 * Defining a function that will apply the transform on each polygon coordinate and finally
 	 * build up the d attribute of the path
@@ -129,13 +138,13 @@ function drawData(data) {
 
 	//Specfying the namespace of the svg
 	svg.attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
-	   .attr("xmlns", "http://www.w3.org/2000/svg")
-	   .attr("class", "tripsSVG");
+		.attr("xmlns", "http://www.w3.org/2000/svg")
+		.attr("class", "tripsSVG");
 
 	//Creating the group that will hold our paths and using the filter appended previously on this group
 	let g_path = svg.append("g")
-				.attr("class", "paths")
-				.attr("filter", "url(#glow)");
+		.attr("class", "paths")
+		.attr("filter", "url(#glow)");
 
 	//Appending the filter to the svg (drop shadow effect)
 	appendDefs();
@@ -163,12 +172,10 @@ function drawData(data) {
 			let point_start = points[0];
 
 			//Giving the path an id of the pickup and dropoff coordinates, it will be used later for a transition
-			d3.select(this).attr("id","id_" + points.toString());
+			d3.select(this).attr("id", "id_" + points.toString());
 
-			//creating the pickup circles using the same d3 function for drawing the path
-			g_circle_start.selectAll(".circles_start")
-				.data(point_start)
-				.enter()
+			//creating the a pickup circles based on the path we drawn
+			g_circle_start
 				.append("circle")
 				.attr("class", "circles_start")
 				.attr("r", 1.8)
@@ -179,12 +186,10 @@ function drawData(data) {
 				});
 
 			//Getting the dropoff coordinates	
-			let point_end = points[1];
+			let point_end = points[1]
 
-			//Creating the dropoff circles using the same d3 function for drawing the path
-			g_circle_end.selectAll(".circles_end")
-				.data(point_end)
-				.enter()
+			//creating the a dropoff circles based on the path we drawn
+			g_circle_end
 				.append("circle")
 				.attr("class", "circles_end")
 				.attr("r", 1.8)
@@ -193,22 +198,22 @@ function drawData(data) {
 				.attr("transform", function () {
 					return translatePoint(point_end);
 				})
-			
+
 			/**
 			 * Giving the pickup and dropoff points the same id as the current path so that each trip will be easily
 			 * accessible (you can call it a primary key for each trip)
-			*/
+			 */
 			g_circle_end.selectAll(".circles_end")
-				.attr("class",d3.select(this).attr("id") + "End");
+				.attr("class", d3.select(this).attr("id") + "End");
 
 			g_circle_start.selectAll(".circles_start")
-				.attr("class",d3.select(this).attr("id") + "Start");
+				.attr("class", d3.select(this).attr("id") + "Start");
 		})
 
 	/**
 	 * Animating the path using a transtion in which the duration will be the time of the trip
 	 * of course we are gonna use the timefactor to speed up the transition
-	*/
+	 */
 	g_path.selectAll(".trips")
 		.attr("stroke-dasharray", function () {
 			var totalLength = this.getTotalLength();
@@ -223,9 +228,9 @@ function drawData(data) {
 
 			//calculate seconds
 			let start = Date.parse(d.properties.pickup_datetime);
-			let	finish = Date.parse(d.properties.dropoff_datetime);
-			let	duration = finish - start;
-			
+			let finish = Date.parse(d.properties.dropoff_datetime);
+			let duration = finish - start;
+
 			//convert to minutes
 			duration = duration / 60000;
 
@@ -235,12 +240,6 @@ function drawData(data) {
 			setTimeout(function () {
 				let point_end = document.getElementsByClassName(d3.select(ref).attr('id') + "End")[0]
 					.setAttribute("opacity", "1");
-
-				// console.log(ref)
-				// for (let i = 0; i < point_end.length; i++) {
-				// 	point_end[i].setAttribute("opacity", "1");
-				// }
-
 			}, duration)
 			return duration;
 		})
@@ -248,7 +247,7 @@ function drawData(data) {
 	/**
 	 * These three lines only get executed if there is another call for this function in a sense
 	 * that if the data changed they will remove the corresponding dom element to the data
-	*/
+	 */
 	trips.exit().remove();
 	g_circle_end.selectAll("circle").exit().remove();
 	g_circle_start.selectAll("circle").exit().remove();

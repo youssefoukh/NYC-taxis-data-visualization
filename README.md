@@ -5,6 +5,9 @@ First install python the lastest stable version then install the following packa
 ```
 pip install flask
 pip install pyodbc
+pip install swifter
+pip install pandas
+pip install geojson
 ```
 ## Running
 Just locate yourself in the directory and press run.py or :

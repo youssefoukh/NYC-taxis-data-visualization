@@ -52,5 +52,7 @@ class Taxi:
     def get_data_by_date(self, date):
         """This is function is used to query by date the dataframe from our data access object
          before passing it to transform_rows"""
-        self._dao.df = self._dao.df.loc[(pd.to_datetime(self._dao.df['pickup_datetime']).dt.day == pd.to_datetime(date).day)]
+        self._dao.df = self._dao.df.loc[
+            (pd.to_datetime(self._dao.df['pickup_datetime']).dt.day == pd.to_datetime(date).day)
+            ]
         return self.transform_rows()

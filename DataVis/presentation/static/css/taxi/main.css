@@ -13,6 +13,16 @@
     src: url('../../fonts/raleway.ttf');
 }
 
+@font-face {
+    font-family: quicksandSemiBold;
+    src: url('../../fonts/Quicksand-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: quicksandMedium;
+    src: url('../../fonts/Quicksand-Medium.ttf');
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -85,7 +95,6 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 input[type=date]::-webkit-calendar-picker-indicator {
-
     background-image: url(../../images/arrow.png);
     background-position: center;
     background-size: 13px 13px;
@@ -113,7 +122,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     margin: 0;
     font-family: poppins;
     font-size: 17px;
-
 }
 
 .hiddenOverlay {
@@ -137,69 +145,83 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     z-index: 50;
 }
 
-.pointsInputs {
+.settings {
     position: absolute;
-    top: 50%;
+    top: 250px;
     left: 1%;
-    width: 15%;
-    background: rgba(0, 0, 0, .6);
-    border-radius: 10px;
+    background: rgba(0, 0, 0, .5);
+    border-radius: 5px;
     color: #fff;
-    padding: 25px;
+    padding: 4px 34px 4px 20px;
     z-index: 15;
-    font-family: raleway;
+    font-family: quicksandSemiBold;
 }
 
-.pointsInputs h3 {
-    font-family: raleway;
-    font-size: 35px;
+.settings h4 {
+    font-size: 21px;
+    margin: 10px 0;
+}
+
+.settings h3 {
+    font-size: 28px;
     margin: 0;
-    padding-bottom: 15px;
 }
 
-.pointsInputs span {
-    font-size: 18px;
-    font-family: raleway;
+.settings span {
+    font-size: 15px;
+    font-family: poppins;
     position: relative;
-    bottom: .5%;
+    bottom: 1.5px;
 }
 
-.pointsInputs div {
-    margin-bottom: 10px;
-    ;
+.tripsPointsSettings {
+    margin-bottom: 5px;
+}
+
+.tripsPathsSettings,
+.tripsPointsSettings {
+    margin-left: 10px;
+}
+
+.tripsPaths,
+.tripsPoints {
+    margin-left: 18px;
+}
+
+.tripsPoints div,
+.tripsPaths div {
+    margin-bottom: 8px;
 }
 
 .legend {
     position: absolute;
-    top: 20%;
+    top: 6px;
     left: 1%;
-    width: 15%;
-    background: rgba(0, 0, 0, .6);
-    border-radius: 10px;
+    background: rgba(0, 0, 0, .5);
+    border-radius: 5px;
     color: #fff;
-    padding: 25px;
+    padding: 13px 43px 16px 20px;
     z-index: 15;
-    font-family: raleway;
-
+    font-family: quicksandSemiBold;
 }
 
 .legend h2 {
-    font-size: 35px;
+    font-size: 26px;
     color: white;
     display: inline;
     margin-left: 15px;
 }
 
 .legendHeader {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .fa-map-marker-alt {
-    font-size: 35px;
+    font-size: 32px;
 }
 
 .fa-circle {
-    font-size: 20px;
+    font-size: 18px;
     margin-right: 10px;
 }
 
@@ -218,7 +240,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 .legend p {
     display: inline;
     margin: 0;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .startPointLegend {
@@ -231,7 +253,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 }
 
 .tripLegend path {
-    stroke: rgb(255, 178, 72);
     stroke-width: 4.4px;
     stroke-opacity: 1 !important;
 }
@@ -249,6 +270,23 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
     width: 32px;
     height: 40px;
     position: absolute;
+    stroke: rgb(255, 178, 72);
+}
+
+#daytripPath {
+    stroke: #d2d2d2;
+    margin-top: 0px;
+    width: 32px;
+    height: 40px;
+    position: absolute;
+}
+
+#nighttripPath {
+    stroke: rgb(155, 227, 255);
+    margin-top: 0px;
+    width: 32px;
+    height: 40px;
+    position: absolute;
 }
 
 #map {
@@ -260,9 +298,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover {
 path {
     fill: none;
     stroke-linejoin: round;
-    stroke: rgb(243, 221, 94);
-    /* color: #5B00A2;
-    color: #C9447A; */
     stroke-opacity: .5;
     stroke-width: .8px;
     z-index: 30;
@@ -272,4 +307,89 @@ svg {
     position: absolute;
     width: 100%;
     height: 100%;
+}
+
+.hidden {
+    stroke-opacity: 0;
+}
+
+.hiddenCircle {
+    opacity: 0;
+}
+
+.default {
+    stroke-opacity: .5;
+    stroke: rgb(255, 178, 72);
+}
+
+.day {
+    stroke-opacity: .5;
+    stroke: #66ff6f;
+}
+
+.night {
+    stroke-opacity: .5;
+    stroke: #59d4ff;
+}
+
+#graphWrapper {
+    bottom: 5px;
+    left: 1%;
+    width: 600px;
+    height: 185px;
+    padding: 0px;
+    position: absolute;
+    color: rgb(237, 237, 237);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
+    z-index: 20;
+}
+
+#graph-header {
+    text-align: center;
+    margin: 0;
+    font-family: quicksandSemiBold;
+    font-size: 21px;
+}
+
+#graphWrapper h4 {
+    margin: 0;
+}
+
+.graph-tip {
+    position: absolute;
+    top: 25px;
+    color: #fff;
+    background: #000;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 1000;
+    font-family: quicksandMedium;
+}
+
+.graph-left {
+    position: absolute;
+    top: 50px;
+    left: 38px;
+    font-size: 13px;
+    transform: rotate(270deg);
+    font-family: poppins;
+}
+
+.bar {
+    opacity: .9;
+    fill: steelblue;
+    stroke: transparent;
+    stroke-width: 2px;
+}
+
+.bar:hover {
+    fill: #005AA3;
+    cursor: pointer;
+}
+
+.axisBottom,
+.axisLeft {
+    font-family: poppins;
+    font-size: 11px;
 }

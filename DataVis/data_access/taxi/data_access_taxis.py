@@ -15,7 +15,7 @@ class DataAccessTaxis:
                               sep=',',
                               usecols=['pickup_longitude', 'pickup_latitude', 'dropoff_datetime', 'trip_distance',
                                        'passenger_count', 'trip_time_in_secs', 'pickup_datetime', 'dropoff_longitude',
-                                       'dropoff_latitude'])
+                                       'dropoff_latitude'],nrows=50)
         # Sorting our data by pickup datetime
         self.df.set_index('pickup_datetime')
         self.clean(self.df)
@@ -23,4 +23,4 @@ class DataAccessTaxis:
     def clean(self, df):
         df = df.loc[(df['pickup_longitude'] != 0) | (df['pickup_latitude'] != 0)
                     | (df['dropoff_longitude'] != 0) | (df['dropoff_latitude'] != 0)]
-        df.to_csv("../../sample.csv")
+        #df.to_csv("../../sample.csv")

@@ -5,7 +5,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaGFtZG91Y2hpIiwiYSI6ImNrNnM2OWF2azBjN2kza21xY
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/hamdouchi/ck6za4ylt0sib1io7x4qp7ypl',
-    zoom: 10.5,
+    zoom: 11,
     bearing: 10,
     pitch: 35, // pitch in degrees
     center: [-73.950295, 40.735655]
@@ -20,13 +20,19 @@ map.addControl(new mapboxgl.NavigationControl());
 function setup() {
     date_chosen = document.getElementById("#date").value;
     // Using the ternary operator we check if the user wants to view a whole month or just a specific day
-    d3.json(date_chosen == "" ? "static/js/taxi/geo_taxi.json" : ("taxi/data/" + date_chosen)).then((d = []) => {
-        d3.select(".overlay").classed("hiddenOverlay", true);
-        d3.select(".overlay").remove();
-        d3.select(".blackBG").remove();
-        data_ = d.features;
-        drawData(d.features);
-    }).catch(er => console.error(er));
+    d3.json(date_chosen == "" ? "static/js/taxi/NYCdata1.json" : ("taxi/data/" + date_chosen))
+        .then((d = []) => {
+            d3.select(".overlay").classed("hiddenOverlay", true);
+            d3.select(".overlay").remove();
+            d3.select(".blackBG").remove();
+            d3.select(".settings").classed("hiddenOverlay", false);
+            d3.select(".legend").classed("hiddenOverlay", false);
+            d3.select(".flexWrapper").classed("hiddenOverlay", false);
+            data_ = d.features;
+            initSVG();
+            initTimeLine();
+            initChart(data_);
+        }).catch(er => console.error(er));
 }
 
 /**
@@ -118,75 +124,65 @@ function appendDefs() {
         '</defs>');
 }
 
+function initSVG() {
+
+    //Creating our svg element and appending it to the Mapbox canvas container
+    svgTrips = d3.select(map.getCanvasContainer()).append("svg");
+
+    //Specfying the namespace of the svg
+    svgTrips.attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .attr("class", "tripsSVG");
+
+    //Appending the filter to the svg (drop shadow effect)
+    appendDefs();
+
+    //Creating the group that will hold our paths and using the filter appended previously on this group
+    g_path = svgTrips.append("g")
+    g_path
+        .attr("class", "paths")
+        .attr("filter", "url(#glow)");
+
+
+    //Creating the group that will hold the circles that visualise the pickup points of the taxi trips
+    g_circle_start = svgTrips.append("g").attr("class", "g_circles_start");
+
+    //Creating the group that will hold the circles that visualise the dropoff points of the taxi trips
+    g_circle_end = svgTrips.append("g")
+        .attr("class", "g_circles_end");
+}
+
 /**
  * This function will actually append paths to our svg element so we can visualise the data on form of path and 
  * circles over the map
  */
-function drawData(data) {
-
-    //This timefactor might be used later to speed up the viz
+function drawData(data, toRemove) {
     let timeFactor = 5;
+    let datePicked;
 
+    if (toRemove) {
+        d3.selectAll(".paths path").remove();
+        d3.selectAll("circle").remove();
+    }
     /**
      * Defining a function that will apply the transform on each polygon coordinate and finally
      * build up the d attribute of the path
      */
     let path = d3.geoPath().projection(transform);
 
-    //Creating our svg element and appending it to the Mapbox canvas container
-    let svg = d3.select(map.getCanvasContainer()).append("svg");
-
-    //Specfying the namespace of the svg
-    svg.attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
-        .attr("xmlns", "http://www.w3.org/2000/svg")
-        .attr("class", "tripsSVG");
-
-    //Creating the group that will hold our paths and using the filter appended previously on this group
-    let g_path = svg.append("g")
-        .attr("class", "paths")
-        .attr("filter", "url(#glow)");
-
-    //Appending the filter to the svg (drop shadow effect)
-    appendDefs();
-
-    //Creating the group that will hold the circles that visualise the pickup points of the taxi trips
-    let g_circle_start = svg.append("g").attr("class", "g_circles_start");
-
-    //Creating the group that will hold the circles that visualise the dropoff points of the taxi trips
-    let g_circle_end = svg.append("g")
-        .attr("class", "g_circles_end");
     let trips = g_path.selectAll(".trips")
         .data(data);
 
-    let tripsPerDay = []
-    if (date_chosen != "") {
-        for (i = 0; i < 24; i++) {
-            if (i == 0)
-                tripsPerDay[i + "0h"] = 0;
-            else
-                tripsPerDay[i + "h"] = 0;
-        }
-    }
     //Creating empty placeholders for our data because at first we have no paths
     linePath = trips.enter()
         .append("path")
-        .attr("class", "default")
+        .classed("default", true)
         //generating the path
         .attr("d", path)
         //For each path drawn we will draw along two circles for pickup and dropoff
         .each(function (d) {
-            if (date_chosen == "") {
-                dateToTest = new Date(d.properties.pickup_datetime).toLocaleDateString();
-            } else {
-                d3.select("#graph-header").text("Hourly stats")
-                dateToTest = new Date(d.properties.pickup_datetime).getHours() + "H";
-            }
-            //counting the number of trips per day
-            if (!tripsPerDay[dateToTest]) { // if no key for that number yet
-                tripsPerDay[dateToTest] = 0; // then make one
-            }
 
-            ++tripsPerDay[dateToTest]; // increment the property for that number
+            datePicked = new Date(d.properties.pickup_datetime).getDate().toString() + new Date(d.properties.pickup_datetime).getHours().toString();
 
             //Getting the pickup and dropoff coordinates from the path
             let points = pathStartPointEndPoint(d3.select(this));
@@ -196,11 +192,12 @@ function drawData(data) {
 
             //Giving the path an id of the pickup and dropoff coordinates, it will be used later for a transition
             d3.select(this).attr("id", "id_" + points.toString());
+            d3.select(this).classed("date_" + datePicked, true);
 
             //creating the a pickup circles based on the path we drawn
             let start = g_circle_start
                 .append("circle")
-                .attr("r", 1.8)
+                .attr("r", 1)
                 .attr("fill", "#00E676")
                 //positining the circle at the start of the path 
                 .attr("transform", function () {
@@ -213,8 +210,7 @@ function drawData(data) {
             //creating the a dropoff circles based on the path we drawn
             let end = g_circle_end
                 .append("circle")
-                .attr("r", 1.8)
-                .attr("opacity", "0")
+                .attr("r", 1)
                 .attr("fill", "#940128")
                 //positining the circle at the start of the path 
                 .attr("transform", function () {
@@ -225,17 +221,15 @@ function drawData(data) {
              * Giving the pickup and dropoff points the same id as the current path so that each trip will be easily
              * accessible (you can call it a primary key for each trip)
              */
-
             let ref = this;
             start.attr("class", d3.select(ref).attr("id") + "Start " + "circle" + figureTime(d.properties.pickup_datetime));
             end.attr("class", d3.select(ref).attr("id") + "End " + "circle" + figureTime(d.properties.pickup_datetime));
-        })
-    initChart(tripsPerDay)
+        });
     /**
      * Animating the path using a transtion in which the duration will be the time of the trip
      * of course we are gonna use the timefactor to speed up the transition
      */
-    g_path.selectAll("path")
+    g_path.selectAll("path.date_" + datePicked)
         .attr("stroke-dasharray", function () {
             var totalLength = this.getTotalLength();
             return totalLength + " " + totalLength;
@@ -257,11 +251,6 @@ function drawData(data) {
 
             //this will be used later if we want to speed up the animation
             duration = duration * (1 / timeFactor) * 1000;
-            let ref = this;
-            setTimeout(function () {
-                document.getElementsByClassName(d3.select(ref).attr('id') + "End")[0]
-                    .setAttribute("opacity", "1");
-            }, duration);
             return duration;
         })
         .attr("stroke-dashoffset", 0);
@@ -269,10 +258,9 @@ function drawData(data) {
      * These three lines only get executed if there is another call for this function in a sense
      * that if the data changed they will remove the corresponding dom element to the data
      */
-    linePath.exit().remove();
+    trips.exit().remove();
     g_circle_end.selectAll("circle").exit().remove();
     g_circle_start.selectAll("circle").exit().remove();
-
 }
 
 /**
@@ -292,12 +280,16 @@ map.on("viewreset", function () {
 
         // Using the point_start variable and the function translatePoint we translate all the start points 
         //so that they stick to the path
-        document.getElementsByClassName(d3.select(this).attr('id') + "Start")[0]
-            .setAttribute("transform", translatePoint(point_start));
+        let circlesStart = document.getElementsByClassName(d3.select(this).attr('id') + "Start");
+
+        for (i = 0; i < circlesStart.length; i++)
+            circlesStart[i].setAttribute("transform", translatePoint(point_start));
 
         // Same as the start points, we translate the end points
-        document.getElementsByClassName(d3.select(this).attr('id') + "End")[0]
-            .setAttribute("transform", translatePoint(point_end));
+        let circlesEnd = document.getElementsByClassName(d3.select(this).attr('id') + "End");
+
+        for (i = 0; i < circlesEnd.length; i++)
+            circlesEnd[i].setAttribute("transform", translatePoint(point_end));
     });
 });
 
@@ -314,11 +306,15 @@ map.on("move", function () {
         let point_start = points[0];
         let point_end = points[1];
 
-        document.getElementsByClassName(d3.select(this).attr('id') + "Start")[0]
-            .setAttribute("transform", translatePoint(point_start));
+        let circlesStart = document.getElementsByClassName(d3.select(this).attr('id') + "Start");
 
-        document.getElementsByClassName(d3.select(this).attr('id') + "End")[0]
-            .setAttribute("transform", translatePoint(point_end));
+        for (i = 0; i < circlesStart.length; i++)
+            circlesStart[i].setAttribute("transform", translatePoint(point_start));
+
+        let circlesEnd = document.getElementsByClassName(d3.select(this).attr('id') + "End");
+
+        for (i = 0; i < circlesEnd.length; i++)
+            circlesEnd[i].setAttribute("transform", translatePoint(point_end));
 
     });
 });
@@ -351,9 +347,9 @@ document.querySelector("#startPointsInput").addEventListener('change', (event) =
  */
 document.querySelector("#endPointsInput").addEventListener('change', (event) => {
     if (event.target.checked) {
-        d3.selectAll(".g_circles_end circle").classed("hiddenCircle", false);
+        d3.selectAll(".g_circles_end circle").style("opacity", 1);
     } else {
-        d3.selectAll(".g_circles_end circle").classed("hiddenCircle", true);
+        d3.selectAll(".g_circles_end circle").style("opacity", 0);
     }
 });
 /**
@@ -366,11 +362,40 @@ function figureTime(date) {
 /**
  * This functions is used to query our data by a value given through the timeline
  */
-function queryData(data = [], date_chosen) {
-    return data.filter(function (item) {
-        return (new Date(item.properties.pickup_datetime).toLocaleDateString() == date_chosen)
-    });
+function queryData(newDate, oldDate = null) {
+    let tripDate;
+    return data_.filter(function (item) {
+        if (date_chosen == "") {
+            tripDate = new Date(item.properties.pickup_datetime);
+            if (oldDate != null) {
+                if (((tripDate.getDate() == newDate.getDate() && tripDate.getHours() <= newDate.getHours()) ||
+                        (tripDate.getDate() < newDate.getDate())) &&
+                    ((tripDate.getDate() == oldDate.getDate() && tripDate.getHours() > oldDate.getHours()) ||
+                        (tripDate.getDate() > oldDate.getDate()))) {
+                    return item;
+                }
+            } else {
+                if ((tripDate.getDate() == newDate.getDate() && tripDate.getHours() < newDate.getHours()) ||
+                    tripDate.getDate() < newDate.getDate()) {
+                    return item;
+                }
+            }
+
+        } else {
+            tripDate = new Date(item.properties.pickup_datetime);
+            if (oldDate != null) {
+                if ((tripDate.getHours() <= newDate.getHours()) && (tripDate.getHours() > oldDate.getHours())) {
+                    return item;
+                }
+            } else {
+                if (tripDate.getHours() < newDate.getHours()) {
+                    return item;
+                }
+            }
+        }
+    })
 }
+
 
 document.querySelector("#dayTripsInput").addEventListener('change', (event) => {
 
@@ -516,6 +541,31 @@ document.querySelector("#allTripsNightDayInput").addEventListener('change', (eve
 });
 
 function initChart(data = []) {
+
+    let tripsPerDay = []
+    if (date_chosen != "") {
+        for (i = 0; i < 24; i++) {
+            if (i == 0)
+                tripsPerDay[i + "0h"] = 0;
+            else
+                tripsPerDay[i + "h"] = 0;
+        }
+    }
+
+    data.map(d => {
+        if (date_chosen == "") {
+            dateToTest = new Date(d.properties.pickup_datetime).getDate();
+        } else {
+            d3.select("#graph-header").text("Hourly stats")
+            dateToTest = new Date(d.properties.pickup_datetime).getHours() + "";
+        }
+        //counting the number of trips per day
+        if (!tripsPerDay[dateToTest]) { // if no key for that number yet
+            tripsPerDay[dateToTest] = 0; // then make one
+        }
+        ++tripsPerDay[dateToTest]; // increment the property for that number
+    })
+
     let svg = d3.select('svg.chart');
     // Setting the width and height depending on the size of the screen
     let svgWidth = document.getElementById("graphWrapper").clientWidth - 10;
@@ -533,20 +583,20 @@ function initChart(data = []) {
 
     // Since our data values might big we use d3 scales to map our data to values that actually fit the screen
     let y = d3.scaleLinear()
-        .domain([0, d3.max(Object.keys(data).map(d => {
-            return data[d];
+        .domain([0, d3.max(Object.keys(tripsPerDay).map(d => {
+            return tripsPerDay[d];
         }))])
         .range([height, 0]);
     let x = d3.scaleBand()
-        .domain(Object.keys(data))
+        .domain(Object.keys(tripsPerDay))
         .range([0, width])
         .paddingInner(0.1);
 
     //grouping svg elements can be very helpful if we want for example to add text next to an svg element
     let g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);;
-    let bars  = g.selectAll(".bar")
-        .data(Object.keys(data))
-    let newBars =    bars.enter()
+    let bars = g.selectAll(".bar")
+        .data(Object.keys(tripsPerDay))
+    let newBars = bars.enter()
         .append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
@@ -565,14 +615,13 @@ function initChart(data = []) {
     g.append("g")
         .attr("transform", "translate(0," + height + ")")
         .attr("class", "axisBottom")
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(2));
 
     g.append("g")
         .attr("class", "axisLeft")
         .call(d3.axisLeft(y).ticks(6))
         .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+        .attr("y", 10)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .style("color", "white")
@@ -587,8 +636,8 @@ function initChart(data = []) {
 
     function onMouseOver(d) {
         tooltip.classed(".graph-tip", true);
-        tooltip.html(d + ' - Trips: ' + data[d])
-            .style('left', x(d) + 39 + 'px');
+        tooltip.html(d + ' - Trips: ' + tripsPerDay[d])
+            .style('left', x(d) + 42 + 'px');
     }
 
     //adding animation
@@ -597,13 +646,95 @@ function initChart(data = []) {
         .duration(3000)
         .ease(d3.easeSin)
         .attr("y", function (d) {
-            return y(data[d])
+            return y(tripsPerDay[d])
         })
         .attr("height", function (d) {
-            return height - y(data[d])
+            return height - y(tripsPerDay[d])
         })
         .style("opacity", "1");
 
     newBars.exit().remove();
 
+}
+
+function initTimeLine() {
+
+    weekDays = []
+    weekDays[0] = "Sun";
+    weekDays[1] = "Mon";
+    weekDays[2] = "Tue";
+    weekDays[3] = "Wed";
+    weekDays[4] = "Thu";
+    weekDays[5] = "Fri";
+    weekDays[6] = "Sat";
+
+    // const changeWidth = () => {
+    //     let exWidth = document.querySelector(".track-progress").offsetWidth
+    //     document.querySelector(".track-progress").style.width = exWidth + 10 + "px"
+    // }
+    const changeValue = (d) => {
+        date = weekDays[d.getDay()] + " " +
+            d.toLocaleDateString("default", {
+                month: 'short'
+            }) + " " +
+            d.getDate() + ", " + d.getHours() + ":00";
+        document.querySelector(".value-indicator").textContent = date;
+    }
+    Date.prototype.addHours = function (h) {
+        this.setTime(this.getTime() + (h * 60 * 60 * 1000));
+        return this;
+    }
+
+    let daysOfMonth = [];
+    let hoursOfTheDay = [];
+
+    if (date_chosen != "") {
+        for (i = 0; i < 24; i++) {
+            hoursOfTheDay.push({
+                item: new Date(date_chosen).addHours(i)
+            });
+        }
+    } else {
+        let endDate = new Date(2013, 7, 31);
+
+        for (var d = new Date(2013, 7, 1); d <= endDate; d.setDate(d.getDate() + 1)) {
+            for (i = 0; i < 24; i++) {
+                daysOfMonth.push({
+                    item: new Date(d).addHours(i)
+                });
+            }
+        }
+    }
+    let oldDate = daysOfMonth.length == 0 ? hoursOfTheDay[0].item : daysOfMonth[0].item;
+
+    options = {
+        data: daysOfMonth.length == 0 ? hoursOfTheDay : daysOfMonth,
+        showTicks: false,
+        showValue: true,
+        valuePosition: "above",
+        valueIndicatorWidth: 157,
+        showLabels: false,
+        startPosition: 0,
+        thumbHeight: 30,
+        thumbWidth: 30,
+        trackHeight: 15,
+        autoPlayDelay: 100,
+        markerSize: 20,
+        autoPlay: true,
+        loop: false,
+        showTrackProgress: true,
+        handlers: {
+            valueChanged: [function (data, element) {
+                let diff = (data.item.getDate() < oldDate.getDate()) || (data.item.getDate() == oldDate.getDate() && data.item.getHours() < oldDate.getHours());
+                if (diff == false) {
+                    drawData(queryData(data.item, oldDate), diff);
+                } else
+                    drawData(queryData(data.item, null), diff);
+                changeValue(data.item);
+                oldDate = data.item;
+            }]
+        }
+
+    }
+    let myRangeslide = rangeslide("#rangeslide", options);
 }

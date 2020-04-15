@@ -23,6 +23,11 @@
     src: url('../../fonts/Quicksand-Medium.ttf');
 }
 
+@font-face {
+    font-family: quicksandLight;
+    src: url('../../fonts/Quicksand-Light.ttf');
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -310,11 +315,11 @@ svg {
 }
 
 .hidden {
-    stroke-opacity: 0;
+    stroke-opacity: 0 !important;
 }
 
 .hiddenCircle {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .default {
@@ -333,12 +338,13 @@ svg {
 }
 
 #graphWrapper {
-    bottom: 5px;
-    left: 1%;
-    width: 600px;
-    height: 185px;
+    flex: 0 0 39%;
+    /* bottom: 5px; */
+    /* left: 1%; */
+    margin-left: 13px;
+    /* width: 600px; */
+    height: 146px;
     padding: 0px;
-    position: absolute;
     color: rgb(237, 237, 237);
     background: rgba(0, 0, 0, 0.6);
     border-radius: 5px;
@@ -354,6 +360,10 @@ svg {
 
 #graphWrapper h4 {
     margin: 0;
+}
+
+.chart {
+    position: relative;
 }
 
 .graph-tip {
@@ -385,11 +395,52 @@ svg {
 
 .bar:hover {
     fill: #005AA3;
-    cursor: pointer;
 }
 
 .axisBottom,
 .axisLeft {
     font-family: poppins;
     font-size: 11px;
+}
+
+.flexWrapper {
+    display: flex;
+    width: 100%;
+    position: absolute;
+    bottom: 5px;
+    border-radius: 5px;
+    z-index: 20;
+}
+
+.timeRangeSlider {
+    position: relative;
+    flex: 0 0 55%;
+    background: rgba(0, 0, 0, 0.6);
+    margin-top: auto;
+    height: 100px;
+    margin-left: 2%;
+}
+
+#rangeSliderValue {
+    font-size: 23px;
+    font-family: poppins;
+    color: white;
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    margin: 0;
+}
+
+#rangeslide {
+    width: 95%;
+    margin: 0 auto;
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.value-indicator {
+    font-family: poppins !important;
+    font-size: 18px !important;
 }

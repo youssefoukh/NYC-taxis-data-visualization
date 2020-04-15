@@ -15,7 +15,9 @@ def index():
 
 @app.route('/taxi/data')
 def taxi_trips():
-    return jsonify(BusinessFactory.get_business_taxi().transform_rows())
+    BusinessFactory.get_business_taxi().transform_rows()
+    return "done"
+    # return jsonify(BusinessFactory.get_business_taxi().transform_rows())
 
 
 @app.route("/taxi/data/<date>")

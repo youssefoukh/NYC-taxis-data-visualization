@@ -3,14 +3,16 @@ from geojson import Feature, LineString, FeatureCollection, dump
 from DataVis.data_access.utils.helper import Helper
 import swifter
 import pandas as pd
+import json
 
 
 class Taxi:
     """
     this class is used for treatement of the data we get from the csv file through the DataAccessTaxi class
     """
+
     def __init__(self, dao):
-        #injection of our data access object
+        # injection of our data access object
         self._dao = dao
 
     def row_to_geojson(self, features, row):
@@ -47,6 +49,8 @@ class Taxi:
         features = []
         self._dao.df.swifter.apply(lambda row: self.row_to_geojson(features, row), axis=1)
         collection = FeatureCollection(features)
+        with open('NYCdata.json', 'w') as f:
+            json.dump(collection, f, indent=4)
         return collection
 
     def get_data_by_date(self, date):
@@ -54,5 +58,5 @@ class Taxi:
          before passing it to transform_rows"""
         self._dao.df = self._dao.df.loc[
             (pd.to_datetime(self._dao.df['pickup_datetime']).dt.day == pd.to_datetime(date).day)
-            ]
+        ]
         return self.transform_rows()

@@ -1,13 +1,15 @@
 ## PFE-Data-Visualisation
 Big Data Visualisation in spacetime using D3
 ## Prerequisites
-First install python the lastest stable version then install the following packages using pip
+First install python the lastest stable version then install the following packages using pip (lastest version of python comes with pip included otherwise you can download it separately)
 ```
 pip install flask
 pip install pyodbc
 pip install swifter
 pip install pandas
 pip install geojson
+pip install requests
+pip install lxml
 ```
 ## Running
 Just locate yourself in the directory and press run.py or :
